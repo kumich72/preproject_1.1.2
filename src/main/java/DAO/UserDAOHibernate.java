@@ -39,7 +39,6 @@ public class UserDAOHibernate {
             User user = (User) session.load(User.class, id);
             if (user != null) {
                 Transaction transaction = session.beginTransaction();
-
                 user.setEmail(email);
                 user.setName(name);
                 user.setPassword(password);

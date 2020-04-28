@@ -21,7 +21,6 @@ import java.util.List;
 )
 public class GetAllUsersServlet extends HttpServlet {
 
-    UserService userService = new UserService();
     public void init(ServletConfig servletConfig) {
         try {
             super.init(servletConfig);
@@ -32,7 +31,7 @@ public class GetAllUsersServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<User> users = new ArrayList<>();
-        users = userService.getAllUsers();
+        users =  UserService.getInstance().getAllUsers();
         req.setAttribute("users", users);
         getServletContext().getRequestDispatcher("/getAll.jsp").forward(req, resp);
     }

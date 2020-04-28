@@ -21,7 +21,7 @@ import java.util.Map;
         urlPatterns = {"/edit"}
 )
 public class EditUserServlet extends HttpServlet {
-    UserService userService = new UserService();
+//    UserService userService = new UserService();
 
     public void init(ServletConfig servletConfig) {
         try {
@@ -34,7 +34,7 @@ public class EditUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long id = Long.valueOf(req.getParameter("edit_id"));
-        User user = userService.getUserById(id);
+        User user = UserService.getInstance().getUserById(id);
         req.setAttribute("user", user);
         getServletContext().getRequestDispatcher("/edit.jsp").forward(req, resp);
     }
@@ -50,7 +50,9 @@ public class EditUserServlet extends HttpServlet {
             String password = req.getParameter("password");
             String email = req.getParameter("email");
             Long id = Long.valueOf(req.getParameter("id"));
-            message = userService.editUser(id, name, password, email) ? "edit user successful" : "user did not  edited";
+
+            message = UserService.getInstance().editUser(id, name, password, email) ? "edit user successful" : "user did not  edited";
+            //message = userService.editUser(id, name, password, email) ? "edit user successful" : "user did not  edited";
         } catch (DBException e) {
             message = "user did not  edited";
             e.printStackTrace();

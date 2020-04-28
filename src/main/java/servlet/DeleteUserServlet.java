@@ -21,7 +21,7 @@ import java.util.Map;
         urlPatterns = {"/delete"}
         )
 public class DeleteUserServlet extends HttpServlet {
-    UserService userService = new UserService();
+//    UserService userService = new UserService();
     public void init(ServletConfig servletConfig) {
         try {
             super.init(servletConfig);
@@ -43,7 +43,7 @@ public class DeleteUserServlet extends HttpServlet {
         try {
             String idText = req.getParameter("id");
             Long id = Long.valueOf(idText);
-            message = userService.deleteUser(id) ? "Delete user successful" : "user not deleted";
+            message = UserService.getInstance().deleteUser(id) ? "Delete user successful" : "user not deleted";
         } catch (DBException e) {
             message = "user not deleted";
             e.printStackTrace();

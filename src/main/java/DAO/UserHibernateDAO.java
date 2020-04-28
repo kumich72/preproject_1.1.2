@@ -42,7 +42,7 @@ public class UserHibernateDAO implements IUserDAO {
             if (user != null) {
                 Transaction transaction = session.beginTransaction();
                 user.setEmail(email);
-                user.setName(name);
+//                user.setName(name);
                 user.setPassword(password);
                 session.save(user);
                 transaction.commit();
@@ -126,6 +126,11 @@ public class UserHibernateDAO implements IUserDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
+    }
+
+    public boolean createTable() throws SQLException {
+
         return false;
     }
 }

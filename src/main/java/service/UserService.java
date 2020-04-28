@@ -1,9 +1,12 @@
 package service;
 
 
+import DAO.UserHibernateDAO;
 import DAO.UserJdbcDAO;
 import exception.DBException;
 import model.User;
+import org.hibernate.SessionFactory;
+import utils.DBHelper;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -13,41 +16,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserService {
-
-    public UserService() {
+    private SessionFactory sessionFactory;
+    private static UserService userService;
+    private UserService(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-//    public User getClientById(long id) throws DBException {
-//        try {
-//            return getUserDAO().getClientById(id);
-//        } catch (SQLException e) {
-//            throw new DBException(e);
-//        }
-//    }
-//
-//    public boolean validateClient(String name, String password) {
-//        BankClientDAO bankClientDAO = getUserDAO();
-//        try {
-//            return bankClientDAO.validateClient(name, password);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return false;
-//    }
-//
-//    public BankClient getClientByName(String name) {
-//        UserDAO bankClientDAO = getUserDAO();
-//        try {
-//            return bankClientDAO.getClientByName(name);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public static UserService getInstance() {
+        if (userService == null) {
+            userService = new UserService(DBHelper.getSessionFactory());
+        }
+        return userService;
+    }
+
     public User getUserById(Long id) {
-        UserJdbcDAO bankClientDAO = getUserDAO();
+        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+//        UserJdbcDAO userDAO = getUserDAO();
         try {
-            User user = bankClientDAO.getUserById(id);
+            User user = userDAO.getUserById(id);
             return user;
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,10 +41,11 @@ public class UserService {
         return null;
     }
     public List<User> getAllUsers() {
-        UserJdbcDAO userJdbcDAO = getUserDAO();
+        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+//        UserJdbcDAO userDAO = getUserDAO();
         List<User> users = new ArrayList<>();
         try {
-            users = userJdbcDAO.getAllUsers();
+            users = userDAO.getAllUsers();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,9 +53,10 @@ public class UserService {
     }
 
     public boolean deleteUser(Long id) throws DBException {
-        UserJdbcDAO dao = getUserDAO();
+        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+//        UserJdbcDAO userDAO = getUserDAO();
         try {
-            if(dao.deleteUser(id)) {
+            if(userDAO.deleteUser(id)) {
                 return true;
             }
         } catch (Exception e) {
@@ -78,9 +66,10 @@ public class UserService {
     }
 
     public boolean addUser(User user) throws DBException {
-        UserJdbcDAO dao = getUserDAO();
+        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+//        UserJdbcDAO userDAO = getUserDAO();
         try {
-            if (dao.addUser(user)) {
+            if (userDAO.addUser(user)) {
                 return true;
             } else {
                 return false;
@@ -91,9 +80,10 @@ public class UserService {
     }
 
     public boolean editUser(Long id, String name, String password, String email) throws DBException {
-        UserJdbcDAO dao = getUserDAO();
+        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+//        UserJdbcDAO userDAO = getUserDAO();
         try {
-            if (dao.editUser(id, name, password, email)) {
+            if (userDAO.editUser(id, name, password, email)) {
                 return true;
             } else {
                 return false;
@@ -114,9 +104,10 @@ public class UserService {
 //    }
 
     public void createTable() throws DBException {
-        UserJdbcDAO dao = getUserDAO();
+        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+//        UserJdbcDAO userDAO = getUserDAO();
         try {
-            dao.createTable();
+            userDAO.createTable();
         } catch (SQLException e) {
             throw new DBException(e);
         }
@@ -149,5 +140,7 @@ public class UserService {
 
     private static UserJdbcDAO getUserDAO() {
         return new UserJdbcDAO(getMysqlConnection());
-    }
+        }
+
+
 }

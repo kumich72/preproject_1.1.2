@@ -20,7 +20,7 @@ import java.util.Map;
         urlPatterns = {"/add"}
         )
     public class AddUserServlet extends HttpServlet {
-        UserService userService = new UserService();
+//        UserService userService = new UserService();
         public void init(ServletConfig servletConfig) {
             try {
                 super.init(servletConfig);
@@ -45,7 +45,7 @@ import java.util.Map;
         String message = "";
         User user = new User(name, password, email );
         try {
-            message = userService.addUser(user) ? "Add user successful" : "user not add";
+            message = UserService.getInstance().addUser(user) ? "Add user successful" : "user not add";
         } catch (DBException e) {
             message = "user not add";
             e.printStackTrace();

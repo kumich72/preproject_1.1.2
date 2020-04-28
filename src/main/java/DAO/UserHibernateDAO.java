@@ -5,13 +5,15 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAOHibernate {
+public class UserHibernateDAO implements IUserDAO {
     private Session session;
 
-    public UserDAOHibernate(Session session) {
+    public UserHibernateDAO(Session session) {
         this.session = session;
     }
 
@@ -70,6 +72,20 @@ public class UserDAOHibernate {
     }
 
 
+    @Override
+    public User getUserById(Long id) throws SQLException {
+        try {
+            User user = (User) session.load(User.class, id);
+            if (user != null) {
+                return user;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        session.close();
+        return null;
+    }
+
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         try {
@@ -82,6 +98,20 @@ public class UserDAOHibernate {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public boolean addUser(User user) throws SQLException {
+        try {
+            Transaction transaction = session.beginTransaction();
+            session.save(user);
+            transaction.commit();
+            session.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private boolean checkUserExist(String name) {

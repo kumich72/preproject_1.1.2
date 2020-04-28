@@ -1,7 +1,7 @@
 package service;
 
 
-import DAO.UserDAO;
+import DAO.UserJdbcDAO;
 import exception.DBException;
 import model.User;
 
@@ -45,7 +45,7 @@ public class UserService {
 //        return null;
 //    }
     public User getUserById(Long id) {
-        UserDAO bankClientDAO = getUserDAO();
+        UserJdbcDAO bankClientDAO = getUserDAO();
         try {
             User user = bankClientDAO.getUserById(id);
             return user;
@@ -55,10 +55,10 @@ public class UserService {
         return null;
     }
     public List<User> getAllUsers() {
-        UserDAO userDAO = getUserDAO();
+        UserJdbcDAO userJdbcDAO = getUserDAO();
         List<User> users = new ArrayList<>();
         try {
-            users = userDAO.getAllUsers();
+            users = userJdbcDAO.getAllUsers();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,17 +66,19 @@ public class UserService {
     }
 
     public boolean deleteUser(Long id) throws DBException {
-        UserDAO dao = getUserDAO();
+        UserJdbcDAO dao = getUserDAO();
         try {
-            dao.deleteUser(id);
-            return true;
+            if(dao.deleteUser(id)) {
+                return true;
+            }
         } catch (Exception e) {
             throw new DBException(e);
         }
+        return false;
     }
 
     public boolean addUser(User user) throws DBException {
-        UserDAO dao = getUserDAO();
+        UserJdbcDAO dao = getUserDAO();
         try {
             if (dao.addUser(user)) {
                 return true;
@@ -89,7 +91,7 @@ public class UserService {
     }
 
     public boolean editUser(Long id, String name, String password, String email) throws DBException {
-        UserDAO dao = getUserDAO();
+        UserJdbcDAO dao = getUserDAO();
         try {
             if (dao.editUser(id, name, password, email)) {
                 return true;
@@ -112,7 +114,7 @@ public class UserService {
 //    }
 
     public void createTable() throws DBException {
-        UserDAO dao = getUserDAO();
+        UserJdbcDAO dao = getUserDAO();
         try {
             dao.createTable();
         } catch (SQLException e) {
@@ -145,7 +147,7 @@ public class UserService {
         }
     }
 
-    private static UserDAO getUserDAO() {
-        return new UserDAO(getMysqlConnection());
+    private static UserJdbcDAO getUserDAO() {
+        return new UserJdbcDAO(getMysqlConnection());
     }
 }

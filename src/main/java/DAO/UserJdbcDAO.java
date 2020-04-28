@@ -6,10 +6,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAO {
+public class UserJdbcDAO implements IUserDAO {
     private Connection connection;
 
-    public UserDAO(Connection connection) {
+    public UserJdbcDAO(Connection connection) {
         this.connection = connection;
     }
 
@@ -86,10 +86,16 @@ public class UserDAO {
         return isExist;
     }
 
-    public void deleteUser(Long id) throws SQLException {
-        Statement stmt = connection.createStatement();
-        stmt.executeUpdate("DELETE FROM users WHERE id = '" + id + "'");
-        stmt.close();
+    public boolean deleteUser(Long id) throws SQLException {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("DELETE FROM users WHERE id = '" + id + "'");
+            stmt.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public long getUserIdByName(String name) throws SQLException {
@@ -110,7 +116,6 @@ public class UserDAO {
         stmt.execute("create table if not exists users (id bigint auto_increment, name varchar(256), password varchar(256), email varchar(256), primary key (id))");
         stmt.close();
     }
-
 
 
 //    public void dropTable() throws SQLException {

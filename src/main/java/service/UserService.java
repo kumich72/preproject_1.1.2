@@ -1,6 +1,8 @@
 package service;
 
 
+import DAO.IUserDAO;
+import DAO.UserDaoFactory;
 import DAO.UserHibernateDAO;
 import DAO.UserJdbcDAO;
 import exception.DBException;
@@ -18,19 +20,21 @@ import java.util.List;
 public class UserService {
     private SessionFactory sessionFactory;
     private static UserService userService;
-    private UserService(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+//    private UserService(SessionFactory sessionFactory) {
+//        this.sessionFactory = sessionFactory;
+//    }
 
     public static UserService getInstance() {
         if (userService == null) {
-            userService = new UserService(DBHelper.getSessionFactory());
+//            userService = new UserService(DBHelper.createSessionFactory());
+            userService = new UserService();
         }
         return userService;
     }
 
     public User getUserById(Long id) {
-        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+        IUserDAO userDAO = UserDaoFactory.CreateDao();
+       // UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
 //        UserJdbcDAO userDAO = getUserDAO();
         try {
             User user = userDAO.getUserById(id);
@@ -41,7 +45,8 @@ public class UserService {
         return null;
     }
     public List<User> getAllUsers() {
-        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+        IUserDAO userDAO = UserDaoFactory.CreateDao();
+//        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
 //        UserJdbcDAO userDAO = getUserDAO();
         List<User> users = new ArrayList<>();
         try {
@@ -53,7 +58,8 @@ public class UserService {
     }
 
     public boolean deleteUser(Long id) throws DBException {
-        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+        IUserDAO userDAO = UserDaoFactory.CreateDao();
+//        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
 //        UserJdbcDAO userDAO = getUserDAO();
         try {
             if(userDAO.deleteUser(id)) {
@@ -66,7 +72,8 @@ public class UserService {
     }
 
     public boolean addUser(User user) throws DBException {
-        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+        IUserDAO userDAO = UserDaoFactory.CreateDao();
+//        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
 //        UserJdbcDAO userDAO = getUserDAO();
         try {
             if (userDAO.addUser(user)) {
@@ -80,7 +87,8 @@ public class UserService {
     }
 
     public boolean editUser(Long id, String name, String password, String email) throws DBException {
-        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+        IUserDAO userDAO = UserDaoFactory.CreateDao();
+//        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
 //        UserJdbcDAO userDAO = getUserDAO();
         try {
             if (userDAO.editUser(id, name, password, email)) {
@@ -103,44 +111,22 @@ public class UserService {
 //        }
 //    }
 
-    public void createTable() throws DBException {
-        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
-//        UserJdbcDAO userDAO = getUserDAO();
-        try {
-            userDAO.createTable();
-        } catch (SQLException e) {
-            throw new DBException(e);
-        }
-    }
+//    public void createTable() throws DBException {
+//        IUserDAO userDAO = UserDaoFactory.CreateDao();
+////        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+////        UserJdbcDAO userDAO = getUserDAO();
+//        try {
+//            userDAO.createTable();
+//        } catch (SQLException e) {
+//            throw new DBException(e);
+//        }
+//    }
 
-    private static Connection getMysqlConnection() {
-        try {
-            DriverManager.registerDriver((Driver) Class.forName("com.mysql.jdbc.Driver").newInstance());
 
-            StringBuilder url = new StringBuilder();
 
-            url.
-                    append("jdbc:mysql://").        //db type
-                    append("localhost:").           //host name
-                    append("3306/").                //port
-                    append("db_example?").          //db name
-                    append("user=root&").          //login
-                    append("password=root").       //password
-                    append("&serverTimezone=UTC");   //setup server time
-
-            System.out.println("URL: " + url + "\n");
-
-            Connection connection = DriverManager.getConnection(url.toString());
-            return connection;
-        } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new IllegalStateException();
-        }
-    }
-
-    private static UserJdbcDAO getUserDAO() {
-        return new UserJdbcDAO(getMysqlConnection());
-        }
+//    private static UserJdbcDAO getUserDAO() {
+//        return new UserJdbcDAO(getMysqlConnection());
+//        }
 
 
 }

@@ -17,6 +17,8 @@ public class User {
     private String password;
     @Column(name = "email")
     private String email;
+    @Column(name = "role")
+    private String role;
 
     public User() {
 
@@ -67,6 +69,12 @@ public class User {
         this.email = email;
     }
 
+    public String getRole() { return role; }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -80,5 +88,10 @@ public class User {
     public int hashCode() {
 
         return Objects.hash(getName(), getId());
+    }
+
+
+    public boolean isAdmin() {
+        return this.role.equals("admin");
     }
 }

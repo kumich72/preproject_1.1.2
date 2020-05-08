@@ -10,7 +10,7 @@
 
 <body>
 <h1>
-    <form action="/add" method="GET">
+    <form action="/admin/add" method="GET">
         <button type="submit">Add new user</button>
     </form>
     <table border="1">
@@ -32,11 +32,12 @@
                     <td><%=user.getName() %></td>
                     <td><%=user.getEmail() %></td>
                     <td><%=user.getPassword() %></td>
-                    <td><form action="/delete" method="POST">
+                    <td><%=user.getRole() %></td>
+                    <td><form action="/admin/delete" method="POST">
                         <button type="submit">Delete</button>
                         <input type="hidden" id="id" name="id" value="<%=user.getId()%>">
                     </form></td>
-                    <td><form action="/edit" method="GET">
+                    <td><form action="/admin/edit" method="GET">
                         <button type="submit">Edit</button>
                         <input type="hidden" id="edit_id"  name="edit_id" value="<%=user.getId()%>">
                     </form></td>

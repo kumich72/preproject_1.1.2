@@ -14,7 +14,7 @@
     User user = (User) request.getAttribute("user");
     if (user != null) {
     %>
-    <form action="/edit" method="POST">
+    <form action="/admin/edit" method="POST">
         <table border="1">
             <tbody>
             <tr>

@@ -18,7 +18,7 @@ import java.util.Map;
 @WebServlet(
         name = "DeleteUserServlet",
         description = "DeleteUserServlet",
-        urlPatterns = {"/delete"}
+        urlPatterns = {"/admin/delete"}
         )
 public class DeleteUserServlet extends HttpServlet {
 //    UserService userService = new UserService();
@@ -50,6 +50,6 @@ public class DeleteUserServlet extends HttpServlet {
         }
 
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.sendRedirect("/get");
+        resp.sendRedirect("/admin");
     }
 }

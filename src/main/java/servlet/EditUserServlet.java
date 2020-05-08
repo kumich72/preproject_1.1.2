@@ -18,7 +18,7 @@ import java.util.Map;
 @WebServlet(
         name = "EditUserServlet",
         description = "EditUserServlet",
-        urlPatterns = {"/edit"}
+        urlPatterns = {"/admin/edit"}
 )
 public class EditUserServlet extends HttpServlet {
 //    UserService userService = new UserService();
@@ -52,12 +52,12 @@ public class EditUserServlet extends HttpServlet {
             Long id = Long.valueOf(req.getParameter("id"));
 
             message = UserService.getInstance().editUser(id, name, password, email) ? "edit user successful" : "user did not  edited";
-            //message = userService.editUser(id, name, password, email) ? "edit user successful" : "user did not  edited";
         } catch (DBException e) {
             message = "user did not  edited";
             e.printStackTrace();
         }
+        System.out.println(message);
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.sendRedirect("/get");
+        resp.sendRedirect("/admin");
     }
 }

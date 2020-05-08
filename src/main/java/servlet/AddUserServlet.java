@@ -17,7 +17,7 @@ import java.util.Map;
 @WebServlet(
         name = "AddUserServlet",
         description = "AddUserServlet",
-        urlPatterns = {"/add"}
+        urlPatterns = {"/admin/add"}
         )
     public class AddUserServlet extends HttpServlet {
 //        UserService userService = new UserService();
@@ -42,6 +42,7 @@ import java.util.Map;
         String name = req.getParameter("name");
         String password = req.getParameter("password");
         String email = req.getParameter("email");
+        String role = req.getParameter("role");
         String message = "";
         User user = new User(name, password, email );
         try {
@@ -52,6 +53,6 @@ import java.util.Map;
         }
         pageVariables.put("message", message);
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.sendRedirect("/get");
+        resp.sendRedirect("/admin");
     }
 }

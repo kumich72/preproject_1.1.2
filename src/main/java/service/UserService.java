@@ -34,7 +34,7 @@ public class UserService {
 
     public User getUserById(Long id) {
         IUserDAO userDAO = UserDaoFactory.CreateDao();
-       // UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
+        // UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
 //        UserJdbcDAO userDAO = getUserDAO();
         try {
             User user = userDAO.getUserById(id);
@@ -44,6 +44,7 @@ public class UserService {
         }
         return null;
     }
+
     public List<User> getAllUsers() {
         IUserDAO userDAO = UserDaoFactory.CreateDao();
 //        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
@@ -62,7 +63,7 @@ public class UserService {
 //        UserHibernateDAO userDAO = new UserHibernateDAO (sessionFactory.openSession());
 //        UserJdbcDAO userDAO = getUserDAO();
         try {
-            if(userDAO.deleteUser(id)) {
+            if (userDAO.deleteUser(id)) {
                 return true;
             }
         } catch (Exception e) {
@@ -101,6 +102,43 @@ public class UserService {
         }
     }
 
+    public boolean userIsAdmin(String name, String password) throws DBException {
+        IUserDAO userDAO = UserDaoFactory.CreateDao();
+        try {
+            if (userDAO.userIsAdmin(name, password)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            throw new DBException(e);
+        }
+    }
+
+    public User getUserByNameAndPassword(String name, String password) {
+        IUserDAO userDAO = UserDaoFactory.CreateDao();
+        try {
+            User user = userDAO.getUserByNameAndPassword(name, password);
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean userIsAdmin(Long id) throws DBException {
+        IUserDAO userDAO = UserDaoFactory.CreateDao();
+        try {
+            if (userDAO.userIsAdmin(id)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            throw new DBException(e);
+        }
+    }
+
 //
 //    public void cleanUp() throws DBException {
 //        UserDAO dao = getUserDAO();
@@ -121,7 +159,6 @@ public class UserService {
 //            throw new DBException(e);
 //        }
 //    }
-
 
 
 //    private static UserJdbcDAO getUserDAO() {
